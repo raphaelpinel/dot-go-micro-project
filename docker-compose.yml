@@ -12,3 +12,36 @@ services:
     deploy:
       mode: replicated
       replicas: 1
+
+  authentication:
+    build:
+    # Note that the authentication service needs to be installed in a directory called `authentication` that contains the Dockerfile `authentication.dockerfile`
+      context: ./../authentication
+      # Specifies the Dockerfile to be used for building the authentication service.
+      dockerfile: ./../authentication/authentication.dockerfile
+    restart: always
+    ports:
+    # Map port 8081 of localhost to port 80 in the container
+      - "8081:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      # Connection string to the database
+      DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
+
+  postgres:
+    image: 'postgres:14.2'
+    ports:
+      - "5432:5432"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: users
+    volumes:
+      # The docker container will store a local copy of the database in the local directory `./db-data/postgres/`
+      - ./db-data/postgres/:/var/lib/postgresql/data/
