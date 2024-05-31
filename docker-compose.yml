@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  broker:
+    build:
+    # Note that the broker service needs to be installed in a directory called `broker` that contains the Dockerfile `broker.dockerfile`
+      context: ./../broker
+      dockerfile: ./../broker/broker.dockerfile
+    restart: always
+    ports:
+    # Map port 8080 of localhost to port 80 in the container
+      - "8080:80"
+    deploy:
+      mode: replicated
+      replicas: 1
