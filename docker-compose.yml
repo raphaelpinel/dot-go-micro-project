@@ -5,6 +5,7 @@ services:
     build:
     # Note that the broker service needs to be installed in a directory called `broker` that contains the Dockerfile `broker.dockerfile`
       context: ./../broker
+      # Specifies the Dockerfile to be used for building the broker service.
       dockerfile: ./../broker/broker.dockerfile
     restart: always
     ports:
